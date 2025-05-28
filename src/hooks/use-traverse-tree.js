@@ -19,8 +19,29 @@ const useTraverseTree = () => {
     return { ...tree, items: latestNode };
   }
 
-  const deleteNode = () => {};
-  const updateNode = () => {};
+  // ✅ Delete node using DFS
+  function deleteNode(tree, nodeId) {
+    if (!tree.isFolder) return tree;
+
+    const filteredItems = tree.items
+      .filter((item) => item.id !== nodeId)
+      .map((item) => deleteNode(item, nodeId));
+
+    return { ...tree, items: filteredItems };
+  }
+
+  // ✅ Update node name using DFS
+  function updateNode(tree, nodeId, newName) {
+    if (tree.id === nodeId) {
+      return { ...tree, name: newName };
+    }
+
+    const updatedItems = tree.items.map((item) =>
+      updateNode(item, nodeId, newName)
+    );
+
+    return { ...tree, items: updatedItems };
+  }
 
   return { insertNode, deleteNode, updateNode };
 };

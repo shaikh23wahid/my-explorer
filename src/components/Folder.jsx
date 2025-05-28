@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Folder({ handleInsertNode, explorerData }) {
+function Folder({ handleInsertNode, handleDeleteNode, explorerData }) {
   console.log(explorerData);
   const [expand, setExpand] = useState(false);
   const [showInput, setShowInput] = useState({
@@ -24,6 +24,11 @@ function Folder({ handleInsertNode, explorerData }) {
     }
   };
 
+  const onDeleteNode = (e, item) => {
+    e.stopPropagation();
+    handleDeleteNode(item);
+  };
+
   if (explorerData.isFolder) {
     return (
       <div style={{ marginTop: 5 }}>
@@ -33,6 +38,7 @@ function Folder({ handleInsertNode, explorerData }) {
           <div>
             <button onClick={(e) => handleNewFolder(e, true)}>Folder + </button>
             <button onClick={(e) => handleNewFolder(e, false)}>File + </button>
+            <button onClick={(e) => onDeleteNode(e, explorerData)}>🎗</button>
           </div>
         </div>
 
@@ -53,6 +59,7 @@ function Folder({ handleInsertNode, explorerData }) {
           {explorerData.items.map((exp) => {
             return (
               <Folder
+                handleDeleteNode={handleDeleteNode}
                 handleInsertNode={handleInsertNode}
                 explorerData={exp}
                 key={exp.id}
